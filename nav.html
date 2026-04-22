@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的常用 · Daily Stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=JetBrains+Mono:wght@500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f4ef;
+    --bg-2: #ffffff;
+    --ink: #1a1918;
+    --ink-2: #55514c;
+    --ink-3: #8a857e;
+    --line: #e3ded4;
+    --line-2: #d8d1c3;
+    --accent: #c8452d;
+    --accent-2: #d97a3d;
+    --accent-soft: #fbe9e2;
+    --gold: #b8923a;
+    --card: #ffffff;
+    --card-hover: #fffbf3;
+    --shadow: 0 1px 0 rgba(0,0,0,0.02), 0 2px 4px -2px rgba(60,40,20,0.06);
+    --shadow-hover: 0 2px 0 rgba(200,69,45,0.08), 0 8px 20px -6px rgba(60,40,20,0.12);
+    --radius: 4px;
+  }
+  [data-theme="dark"] {
+    --bg: #15130f;
+    --bg-2: #1d1a14;
+    --ink: #f2ebde;
+    --ink-2: #b5ad9e;
+    --ink-3: #77706a;
+    --line: #2a251e;
+    --line-2: #3a3327;
+    --accent: #e85f42;
+    --accent-2: #f0925a;
+    --accent-soft: #2e1a13;
+    --gold: #d4b36a;
+    --card: #1d1a14;
+    --card-hover: #26211a;
+    --shadow: 0 1px 0 rgba(0,0,0,0.2), 0 2px 4px -2px rgba(0,0,0,0.3);
+    --shadow-hover: 0 2px 0 rgba(232,95,66,0.2), 0 8px 20px -6px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Manrope', 'Noto Serif SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.5;
+    transition: background 0.25s ease, color 0.25s ease;
+    min-height: 100vh;
+  }
+  /* 顶部栏 */
+  .topbar {
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  .topbar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .logo {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .logo-mark {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    color: #fff;
+    display: inline-grid;
+    place-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    transform: rotate(-4deg);
+  }
+  .logo-sub {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-3);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-left: 1px solid var(--line-2);
+    padding-left: 12px;
+  }
+  /* 搜索 */
+  .search-wrap {
+    flex: 1;
+    max-width: 640px;
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .search-wrap:focus-within {
+    border-color: var(--accent);
+  }
+  .engine-select {
+    display: flex;
+    background: var(--bg-2);
+    border-right: 1px solid var(--line);
+  }
+  .engine-btn {
+    padding: 9px 12px;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-3);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .engine-btn.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--ink);
+    font-family: inherit;
+    outline: none;
+  }
+  .search-input::placeholder { color: var(--ink-3); }
+  .search-btn {
+    padding: 10px 22px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    transition: background 0.15s;
+  }
+  .search-btn:hover { background: var(--accent-2); }
+  .top-actions { display: flex; gap: 8px; align-items: center; }
+  .icon-btn {
+    width: 36px; height: 36px;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    color: var(--ink-2);
+    transition: all 0.15s;
+    font-size: 16px;
+  }
+  .icon-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* 主体 */
+  .layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 24px 60px;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 24px;
+  }
+  /* 侧边栏 */
+  .sidebar {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 8px 0;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+  .side-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    padding: 10px 16px 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .side-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .side-link:hover {
+    background: var(--bg);
+    color: var(--ink);
+  }
+  .side-link.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .side-link .emoji {
+    font-size: 15px;
+    width: 20px;
+    text-align: center;
+  }
+  .side-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 8px 16px;
+  }
+
+  /* 主内容区 */
+  .main { min-width: 0; }
+  /* 常用收藏横幅 */
+  .favs {
+    background: linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .favs-label {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 14px;
+    border-right: 1px solid var(--line-2);
+  }
+  .favs-label::before { content: "★"; color: var(--accent); }
+  .favs-list {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .fav-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    background: var(--bg-2);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    border: 1px solid var(--line);
+    transition: all 0.15s;
+  }
+  .fav-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .favs-empty {
+    color: var(--ink-3);
+    font-size: 12.5px;
+    font-style: italic;
+  }
+
+  /* 分类区块 */
+  .category {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    margin-bottom: 16px;
+    scroll-margin-top: 90px;
+  }
+  .cat-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .cat-title {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--ink);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .cat-title .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .cat-title .emoji { font-size: 18px; }
+  .cat-accent {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--line);
+  }
+  .site {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    transition: all 0.15s;
+    min-height: 58px;
+  }
+  .site:hover {
+    background: var(--card-hover);
+    box-shadow: var(--shadow-hover);
+    z-index: 2;
+  }
+  .site-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: 1px solid var(--line);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #fff;
+    letter-spacing: -0.02em;
+    border-radius: 2px;
+  }
+  .site-text { min-width: 0; flex: 1; }
+  .site-name {
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .site-desc {
+    font-size: 11px;
+    color: var(--ink-3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+  }
+  .star-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 18px; height: 18px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    color: var(--ink-3);
+    opacity: 0;
+    transition: all 0.15s;
+    font-size: 13px;
+    line-height: 1;
+  }
+  .site:hover .star-btn { opacity: 0.6; }
+  .star-btn:hover { opacity: 1 !important; color: var(--accent); transform: scale(1.2); }
+  .star-btn.starred { opacity: 1; color: var(--accent); }
+
+  /* 页脚 */
+  .footer {
+    text-align: center;
+    padding: 30px 20px 20px;
+    color: var(--ink-3);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+  }
+  .footer hr {
+    border: none;
+    border-top: 1px dashed var(--line-2);
+    max-width: 200px;
+    margin: 0 auto 16px;
+  }
+
+  /* 响应式 */
+  @media (max-width: 1100px) {
+    .cat-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; padding: 16px; }
+    .sidebar {
+      position: static;
+      max-height: none;
+      display: flex;
+      overflow-x: auto;
+      padding: 6px;
+      gap: 2px;
+    }
+    .side-title, .side-divider { display: none; }
+    .side-link {
+      border-left: none;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      padding: 6px 12px;
+    }
+    .side-link.active { border-bottom-color: var(--accent); border-left-color: transparent; }
+    .topbar-inner { flex-wrap: wrap; gap: 12px; padding: 12px 16px; }
+    .logo-sub { display: none; }
+    .search-wrap { order: 3; flex-basis: 100%; }
+    .cat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 500px) {
+    .cat-grid { grid-template-columns: 1fr; }
+  }
+  /* 滚动条 */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">
+      <span class="logo-mark">D.</span>
+      Daily Stack
+      <span class="logo-sub">MY DAILY TOOLS</span>
+    </div>
+    <div class="search-wrap">
+      <div class="engine-select" id="engines"></div>
+      <input type="text" class="search-input" id="searchInput" placeholder="输入关键词，回车搜索…">
+      <button class="search-btn" id="searchBtn">搜 索</button>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="themeBtn" title="切换主题">🌙</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- 侧边栏 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="side-title">分类导航</div>
+    <!-- JS 注入 -->
+  </aside>
+
+  <!-- 主区 -->
+  <main class="main">
+    <!-- 常用 -->
+    <div class="favs">
+      <div class="favs-label">常 用</div>
+      <div class="favs-list" id="favsList"></div>
+    </div>
+    <!-- 分类卡片 -->
+    <div id="catContainer"></div>
+    <div class="footer">
+      <hr>
+      <div>点击 ☆ 收藏到顶部 · 数据保存在本地浏览器</div>
+      <div style="margin-top:6px;opacity:0.6">MY DAILY STACK · CURATED PICKS</div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ========== 数据 ========== */
+const CATEGORIES = [
+  {
+    id: "ai-chat", name: "AI 对话 · 主力", emoji: "💬", accent: "DAILY AI",
+    sites: [
+      { n: "Claude", d: "长文写作 / 代码 / 推理最强", u: "https://claude.ai", c: "#c8452d" },
+      { n: "ChatGPT", d: "OpenAI 通用对话", u: "https://chat.openai.com", c: "#10a37f" },
+      { n: "Gemini", d: "Google · 多模态强", u: "https://gemini.google.com", c: "#4285f4" },
+      { n: "DeepSeek", d: "国产 · 推理/代码性价比", u: "https://chat.deepseek.com", c: "#1e40af" },
+      { n: "Kimi", d: "月之暗面 · 长文本理解", u: "https://kimi.moonshot.cn", c: "#6366f1" },
+      { n: "Grok", d: "xAI · 带实时 X 数据", u: "https://grok.com", c: "#000000" },
+      { n: "Perplexity", d: "AI 搜索 · 带引用", u: "https://www.perplexity.ai", c: "#20808d" },
+      { n: "豆包", d: "字节 · 中文场景顺手", u: "https://www.doubao.com", c: "#4f46e5" },
+      { n: "通义", d: "阿里 · 文档/图表处理", u: "https://tongyi.aliyun.com", c: "#ff6a00" },
+      { n: "Poe", d: "多模型聚合一站调用", u: "https://poe.com", c: "#5436da" },
+      { n: "OpenRouter", d: "API 聚合 · 比价调模型", u: "https://openrouter.ai", c: "#6366f1" },
+      { n: "AI Studio", d: "Google · 免费调 Gemini", u: "https://aistudio.google.com", c: "#4285f4" },
+    ]
+  },
+  {
+    id: "ai-create", name: "AI 创作 · 图音视频", emoji: "🎨", accent: "GENERATIVE",
+    sites: [
+      { n: "Midjourney", d: "绘画天花板 · Discord", u: "https://www.midjourney.com", c: "#000000" },
+      { n: "即梦", d: "字节 · 中文 AI 绘画/视频", u: "https://jimeng.jianying.com", c: "#ef4444" },
+      { n: "Sora", d: "OpenAI · 视频生成", u: "https://sora.com", c: "#000000" },
+      { n: "可灵", d: "快手 · AI 视频顶流", u: "https://klingai.com", c: "#ff6b35" },
+      { n: "Runway", d: "视频生成/编辑老牌", u: "https://runwayml.com", c: "#000000" },
+      { n: "ElevenLabs", d: "AI 配音 · 最自然", u: "https://elevenlabs.io", c: "#000000" },
+      { n: "Suno", d: "AI 作曲 · 一键成歌", u: "https://suno.com", c: "#000000" },
+      { n: "Leonardo", d: "出图稳定 · 免费额度大", u: "https://leonardo.ai", c: "#6366f1" },
+      { n: "Ideogram", d: "AI 出图带文字准", u: "https://ideogram.ai", c: "#000000" },
+      { n: "Krea", d: "实时生图/扩图", u: "https://www.krea.ai", c: "#000000" },
+      { n: "Remove.bg", d: "一键抠图", u: "https://www.remove.bg", c: "#74e0bb" },
+      { n: "Magic Eraser", d: "AI 擦除画面元素", u: "https://magicstudio.com/magiceraser", c: "#7c3aed" },
+    ]
+  },
+  {
+    id: "notes", name: "笔记 · 文档 · 知识", emoji: "📝", accent: "THINK",
+    sites: [
+      { n: "Notion", d: "全能知识库", u: "https://www.notion.so", c: "#000000" },
+      { n: "Obsidian", d: "本地双链笔记", u: "https://obsidian.md", c: "#7c3aed" },
+      { n: "语雀", d: "中文专业文档", u: "https://www.yuque.com", c: "#25b864" },
+      { n: "飞书文档", d: "团队协作编辑快", u: "https://www.feishu.cn", c: "#00d6b9" },
+      { n: "腾讯文档", d: "国内最顺的在线表格", u: "https://docs.qq.com", c: "#0052d9" },
+      { n: "Google Docs", d: "跨平台协作标配", u: "https://docs.google.com", c: "#4285f4" },
+      { n: "Heptabase", d: "可视化白板笔记", u: "https://heptabase.com", c: "#000000" },
+      { n: "Readwise", d: "读书划线/高亮同步", u: "https://readwise.io", c: "#fa4822" },
+      { n: "Zotero", d: "文献管理神器", u: "https://www.zotero.org", c: "#aa3333" },
+      { n: "Typora", d: "最优雅的 Markdown", u: "https://typora.io", c: "#42474f" },
+      { n: "Excalidraw", d: "手绘风在线白板", u: "https://excalidraw.com", c: "#6965db" },
+      { n: "Miro", d: "协作白板专业版", u: "https://miro.com", c: "#ffd02f" },
+    ]
+  },
+  {
+    id: "design", name: "设计 · 灵感 · 素材", emoji: "🎭", accent: "CRAFT",
+    sites: [
+      { n: "Figma", d: "设计协作标配", u: "https://www.figma.com", c: "#a259ff" },
+      { n: "Dribbble", d: "UI 灵感第一站", u: "https://dribbble.com", c: "#ea4c89" },
+      { n: "Behance", d: "Adobe 系作品集", u: "https://www.behance.net", c: "#1769ff" },
+      { n: "Awwwards", d: "顶级网站设计奖", u: "https://www.awwwards.com", c: "#000000" },
+      { n: "Mobbin", d: "移动端 UI 模式库", u: "https://mobbin.com", c: "#000000" },
+      { n: "Godly", d: "精选酷炫网站集", u: "https://godly.website", c: "#000000" },
+      { n: "Land-book", d: "landing page 灵感", u: "https://land-book.com", c: "#9333ea" },
+      { n: "Unsplash", d: "免费高清图库", u: "https://unsplash.com", c: "#000000" },
+      { n: "Pexels", d: "免费图片+视频", u: "https://www.pexels.com", c: "#05a081" },
+      { n: "Lucide", d: "优雅开源图标", u: "https://lucide.dev", c: "#000000" },
+      { n: "Iconfont", d: "阿里图标/插画库", u: "https://www.iconfont.cn", c: "#ff4646" },
+      { n: "Coolors", d: "配色方案生成器", u: "https://coolors.co", c: "#6366f1" },
+      { n: "Fonts in Use", d: "字体实际用例参考", u: "https://fontsinuse.com", c: "#0f5a9c" },
+      { n: "字由", d: "中文字体试用/下载", u: "https://www.hellofont.cn", c: "#ff5c5c" },
+    ]
+  },
+  {
+    id: "dev", name: "开发 · 代码 · 文档", emoji: "💻", accent: "CODE",
+    sites: [
+      { n: "GitHub", d: "不用介绍了", u: "https://github.com", c: "#24292e" },
+      { n: "Claude Code", d: "Anthropic 编码 CLI", u: "https://docs.claude.com/en/docs/claude-code", c: "#c8452d" },
+      { n: "Cursor", d: "AI 优先的编辑器", u: "https://cursor.com", c: "#000000" },
+      { n: "v0", d: "Vercel · AI 生成 UI", u: "https://v0.dev", c: "#000000" },
+      { n: "Vercel", d: "前端部署首选", u: "https://vercel.com", c: "#000000" },
+      { n: "Stack Overflow", d: "编程问答老字号", u: "https://stackoverflow.com", c: "#f48024" },
+      { n: "MDN", d: "Web 开发权威文档", u: "https://developer.mozilla.org", c: "#000000" },
+      { n: "DevDocs", d: "离线 API 文档集合", u: "https://devdocs.io", c: "#47a372" },
+      { n: "CodePen", d: "前端作品即时预览", u: "https://codepen.io", c: "#000000" },
+      { n: "Hugging Face", d: "AI 模型/数据集社区", u: "https://huggingface.co", c: "#fbbf24" },
+      { n: "Replit", d: "浏览器即开即用 IDE", u: "https://replit.com", c: "#f26207" },
+      { n: "Regex101", d: "正则可视化调试", u: "https://regex101.com", c: "#3c4b5c" },
+      { n: "Can I Use", d: "浏览器特性兼容查询", u: "https://caniuse.com", c: "#1572b6" },
+      { n: "Anthropic Docs", d: "Claude API 官方文档", u: "https://docs.claude.com", c: "#c8452d" },
+    ]
+  },
+  {
+    id: "read", name: "阅读 · 资讯 · 输入", emoji: "📰", accent: "INPUT",
+    sites: [
+      { n: "X / Twitter", d: "业内第一信息源", u: "https://x.com", c: "#000000" },
+      { n: "知乎", d: "中文长答案", u: "https://www.zhihu.com", c: "#0084ff" },
+      { n: "Hacker News", d: "科技圈议程设定", u: "https://news.ycombinator.com", c: "#ff6600" },
+      { n: "少数派", d: "数字生活方式精品", u: "https://sspai.com", c: "#d32636" },
+      { n: "36氪", d: "国内科技创投", u: "https://36kr.com", c: "#1351e8" },
+      { n: "The Verge", d: "科技生活深度报道", u: "https://www.theverge.com", c: "#5200ff" },
+      { n: "Ars Technica", d: "技术深度老牌", u: "https://arstechnica.com", c: "#ff4e00" },
+      { n: "MIT Tech Review", d: "严肃科技评论", u: "https://www.technologyreview.com", c: "#000000" },
+      { n: "Wired", d: "科技文化杂志", u: "https://www.wired.com", c: "#000000" },
+      { n: "Medium", d: "英文长文平台", u: "https://medium.com", c: "#000000" },
+      { n: "Substack", d: "独立作者 newsletter", u: "https://substack.com", c: "#ff6719" },
+      { n: "Product Hunt", d: "每天新产品看一眼", u: "https://www.producthunt.com", c: "#da552f" },
+      { n: "端传媒", d: "深度中文长报道", u: "https://theinitium.com", c: "#000000" },
+      { n: "RSS · Feedly", d: "RSS 阅读器", u: "https://feedly.com", c: "#2bb24c" },
+    ]
+  },
+  {
+    id: "work", name: "办公 · 效率 · 协作", emoji: "⚡", accent: "FLOW",
+    sites: [
+      { n: "Gmail", d: "主力邮箱", u: "https://mail.google.com", c: "#ea4335" },
+      { n: "Google Calendar", d: "日程管理", u: "https://calendar.google.com", c: "#4285f4" },
+      { n: "Google Drive", d: "云盘协作", u: "https://drive.google.com", c: "#0f9d58" },
+      { n: "Linear", d: "最好看的项目管理", u: "https://linear.app", c: "#5e6ad2" },
+      { n: "Trello", d: "简单看板", u: "https://trello.com", c: "#0079bf" },
+      { n: "Airtable", d: "低代码数据库", u: "https://airtable.com", c: "#fcb400" },
+      { n: "Slack", d: "团队即时沟通", u: "https://slack.com", c: "#4a154b" },
+      { n: "DeepL", d: "最准翻译器", u: "https://www.deepl.com", c: "#0f2b46" },
+      { n: "沉浸式翻译", d: "双语网页翻译扩展", u: "https://immersivetranslate.com", c: "#ea580c" },
+      { n: "TinyPNG", d: "无损图片压缩", u: "https://tinypng.com", c: "#1ab186" },
+      { n: "Smallpdf", d: "PDF 瑞士军刀", u: "https://smallpdf.com", c: "#ff414d" },
+      { n: "CleanShot", d: "Mac 最强截图", u: "https://cleanshot.com", c: "#000000" },
+    ]
+  },
+  {
+    id: "learn", name: "学习 · 成长 · 参考", emoji: "📚", accent: "LEARN",
+    sites: [
+      { n: "B 站", d: "中文学习第一视频站", u: "https://www.bilibili.com", c: "#00a1d6" },
+      { n: "YouTube", d: "英文教程无敌", u: "https://www.youtube.com", c: "#ff0000" },
+      { n: "Coursera", d: "名校课程", u: "https://www.coursera.org", c: "#0056d2" },
+      { n: "edX", d: "哈佛 MIT 等公开课", u: "https://www.edx.org", c: "#02262b" },
+      { n: "MIT OCW", d: "MIT 开放课程全免费", u: "https://ocw.mit.edu", c: "#8a1b29" },
+      { n: "3Blue1Brown", d: "数学可视化神作", u: "https://www.3blue1brown.com", c: "#2b4c8c" },
+      { n: "Khan Academy", d: "可汗学院", u: "https://www.khanacademy.org", c: "#14bf96" },
+      { n: "Wikipedia", d: "英文为主", u: "https://en.wikipedia.org", c: "#000000" },
+      { n: "Anki", d: "间隔重复记忆法", u: "https://apps.ankiweb.net", c: "#2563eb" },
+      { n: "Google Scholar", d: "学术论文搜索", u: "https://scholar.google.com", c: "#4285f4" },
+      { n: "Arxiv", d: "论文预印本", u: "https://arxiv.org", c: "#b31b1b" },
+      { n: "Papers With Code", d: "AI 论文+开源实现", u: "https://paperswithcode.com", c: "#21cbce" },
+    ]
+  },
+  {
+    id: "gems", name: "小众精品 · 冷门好物", emoji: "💎", accent: "GEMS",
+    sites: [
+      { n: "Raycast", d: "Mac 下的生产力神器", u: "https://www.raycast.com", c: "#ff6363" },
+      { n: "Arc", d: "重新定义浏览器", u: "https://arc.net", c: "#ff4d6f" },
+      { n: "Warp", d: "新一代终端", u: "https://www.warp.dev", c: "#01a4ff" },
+      { n: "Cron", d: "最好看的日历 App", u: "https://cron.com", c: "#000000" },
+      { n: "Cal.com", d: "开源版 Calendly", u: "https://cal.com", c: "#111827" },
+      { n: "TLDraw", d: "简约画板 · 可嵌入", u: "https://www.tldraw.com", c: "#000000" },
+      { n: "Cobalt", d: "纯净视频下载器", u: "https://cobalt.tools", c: "#000000" },
+      { n: "Are.na", d: "反算法的内容收藏", u: "https://www.are.na", c: "#000000" },
+      { n: "Wallos", d: "订阅追踪开源", u: "https://wallosapp.com", c: "#4f46e5" },
+      { n: "Follow", d: "新一代 RSS 阅读器", u: "https://follow.is", c: "#ff5c00" },
+      { n: "Ahrefs Writer", d: "免费 AI 写作工具", u: "https://ahrefs.com/writing-tools", c: "#0082f7" },
+      { n: "Perchance", d: "随机生成一切", u: "https://perchance.org", c: "#4caf50" },
+    ]
+  },
+];
+
+const SEARCH_ENGINES = [
+  { id: "google", name: "Google", url: "https://www.google.com/search?q=" },
+  { id: "baidu", name: "百度", url: "https://www.baidu.com/s?wd=" },
+  { id: "bing", name: "必应", url: "https://www.bing.com/search?q=" },
+];
+
+/* ========== 状态 ========== */
+const LS = {
+  THEME: "nav_theme",
+  ENGINE: "nav_engine",
+  FAVS: "nav_favs",
+};
+let currentEngine = localStorage.getItem(LS.ENGINE) || "google";
+let favs = new Set(JSON.parse(localStorage.getItem(LS.FAVS) || "[]"));
+
+/* ========== 渲染 ========== */
+function renderSidebar() {
+  const sb = document.getElementById("sidebar");
+  let html = '<div class="side-title">分类导航</div>';
+  CATEGORIES.forEach((c, i) => {
+    html += `<a class="side-link" data-cat="${c.id}" href="#cat-${c.id}">
+      <span class="emoji">${c.emoji}</span>
+      <span>${c.name}</span>
+    </a>`;
+  });
+  html += '<div class="side-divider"></div><div class="side-title">快捷</div>';
+  html += '<a class="side-link" href="#top"><span class="emoji">⬆️</span><span>回到顶部</span></a>';
+  sb.innerHTML = html;
+}
+
+function siteHTML(site, catId) {
+  const key = catId + "|" + site.u;
+  const starred = favs.has(key);
+  const initial = site.n.replace(/[^a-zA-Z\u4e00-\u9fa5]/g, "").slice(0, 1) || site.n.slice(0, 1);
+  return `<a class="site" href="${site.u}" target="_blank" rel="noopener" data-key="${key}" data-name="${site.n}" data-url="${site.u}" data-cat="${catId}">
+    <span class="site-icon" style="background:${site.c}">${initial}</span>
+    <span class="site-text">
+      <span class="site-name">${site.n}</span>
+      <span class="site-desc">${site.d}</span>
+    </span>
+    <button class="star-btn ${starred ? 'starred' : ''}" data-star="${key}" title="收藏" aria-label="收藏">${starred ? '★' : '☆'}</button>
+  </a>`;
+}
+
+function renderCategories() {
+  const c = document.getElementById("catContainer");
+  let html = "";
+  CATEGORIES.forEach(cat => {
+    html += `<section class="category" id="cat-${cat.id}">
+      <div class="cat-head">
+        <h2 class="cat-title">
+          <span class="emoji">${cat.emoji}</span>
+          <span>${cat.name}</span>
+          <span class="num">· ${String(cat.sites.length).padStart(2, "0")} 站</span>
+        </h2>
+        <span class="cat-accent">— ${cat.accent}</span>
+      </div>
+      <div class="cat-grid">
+        ${cat.sites.map(s => siteHTML(s, cat.id)).join("")}
+      </div>
+    </section>`;
+  });
+  c.innerHTML = html;
+}
+
+function renderFavs() {
+  const f = document.getElementById("favsList");
+  const items = [];
+  CATEGORIES.forEach(cat => {
+    cat.sites.forEach(s => {
+      const key = cat.id + "|" + s.u;
+      if (favs.has(key)) items.push({ site: s, cat: cat.id });
+    });
+  });
+  if (items.length === 0) {
+    f.innerHTML = '<span class="favs-empty">点击网址卡片右上角的 ☆ 收藏到这里 →</span>';
+  } else {
+    f.innerHTML = items.map(x =>
+      `<a class="fav-chip" href="${x.site.u}" target="_blank" rel="noopener">
+        <span style="display:inline-block;width:6px;height:6px;background:${x.site.c};border-radius:50%"></span>
+        ${x.site.n}
+      </a>`
+    ).join("");
+  }
+}
+
+function renderEngines() {
+  const el = document.getElementById("engines");
+  el.innerHTML = SEARCH_ENGINES.map(e =>
+    `<button class="engine-btn ${currentEngine === e.id ? 'active' : ''}" data-engine="${e.id}">${e.name}</button>`
+  ).join("");
+}
+
+/* ========== 交互 ========== */
+function initTheme() {
+  const saved = localStorage.getItem(LS.THEME);
+  const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const theme = saved || (prefers ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", theme);
+  document.getElementById("themeBtn").textContent = theme === "dark" ? "☀️" : "🌙";
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute("data-theme");
+  const next = cur === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem(LS.THEME, next);
+  document.getElementById("themeBtn").textContent = next === "dark" ? "☀️" : "🌙";
+}
+
+function doSearch() {
+  const q = document.getElementById("searchInput").value.trim();
+  if (!q) return;
+  const engine = SEARCH_ENGINES.find(e => e.id === currentEngine);
+  window.open(engine.url + encodeURIComponent(q), "_blank", "noopener");
+}
+
+function toggleFav(key) {
+  if (favs.has(key)) favs.delete(key); else favs.add(key);
+  localStorage.setItem(LS.FAVS, JSON.stringify([...favs]));
+  // 更新按钮
+  document.querySelectorAll(`[data-star="${CSS.escape(key)}"]`).forEach(btn => {
+    const s = favs.has(key);
+    btn.classList.toggle("starred", s);
+    btn.textContent = s ? "★" : "☆";
+  });
+  renderFavs();
+}
+
+function setActiveSidebar(catId) {
+  document.querySelectorAll(".side-link").forEach(l => {
+    l.classList.toggle("active", l.dataset.cat === catId);
+  });
+}
+
+/* ========== 事件绑定 ========== */
+function bindEvents() {
+  // 搜索引擎切换
+  document.getElementById("engines").addEventListener("click", e => {
+    const btn = e.target.closest("[data-engine]");
+    if (!btn) return;
+    currentEngine = btn.dataset.engine;
+    localStorage.setItem(LS.ENGINE, currentEngine);
+    renderEngines();
+  });
+  // 搜索
+  document.getElementById("searchBtn").addEventListener("click", doSearch);
+  document.getElementById("searchInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") doSearch();
+  });
+  // 主题
+  document.getElementById("themeBtn").addEventListener("click", toggleTheme);
+  // 收藏
+  document.getElementById("catContainer").addEventListener("click", e => {
+    const star = e.target.closest("[data-star]");
+    if (star) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFav(star.dataset.star);
+    }
+  });
+  // 侧边栏高亮（滚动监听）
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        const id = en.target.id.replace("cat-", "");
+        setActiveSidebar(id);
+      }
+    });
+  }, { rootMargin: "-40% 0px -50% 0px" });
+  document.querySelectorAll(".category").forEach(c => io.observe(c));
+}
+
+/* ========== 启动 ========== */
+initTheme();
+renderEngines();
+renderSidebar();
+renderCategories();
+renderFavs();
+bindEvents();
+</script>
+</body>
+</html>
